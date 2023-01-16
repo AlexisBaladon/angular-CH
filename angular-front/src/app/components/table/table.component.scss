@@ -1,0 +1,9 @@
+table {
+    width: 100%;
+    background-color: white;
+
+    thead {
+        --bs-table-bg: #198754 !important;
+        color: white;
+    }
+}
