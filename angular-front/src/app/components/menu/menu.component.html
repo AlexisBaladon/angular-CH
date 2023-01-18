@@ -43,3 +43,25 @@
     </li>
     </ul>
 </div>
+<button
+    id="open-close-button"
+    class="btn btn-dark"
+    type="button"
+    style="position: absolute; top: 11%; left: 280px; height: 50px; border-radius: 0 5px 5px 0 !important;"
+    onClick="
+        const MENU_CLOSED_CLASSNAME = 'left-menu';
+        const button = document.getElementById('open-close-button')
+        const leftMenu = document.getElementById('left-menu');
+        if (leftMenu.classList.contains(MENU_CLOSED_CLASSNAME)) {
+            leftMenu.classList.remove(MENU_CLOSED_CLASSNAME)
+            button.style.left = '280px';
+            button.innerHTML = '➖'
+        }
+        else {
+            leftMenu.classList.add(MENU_CLOSED_CLASSNAME);
+            button.style.left = '30px';
+            button.innerHTML = '➕'
+        }
+    "
+> ➖
+</button>
