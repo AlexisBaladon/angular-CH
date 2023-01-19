@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken';
+import bcrypt from 'bcrypt';
 import { User, LoginUser, RegisterUser } from '../interfaces/user';
 
 //const usersDAO = new UsersDAO()
@@ -11,7 +12,7 @@ let users: UserAuth[] = [
 
 class AuthController {
 
-  public register(req, res) {
+  public async signup(req, res) {
     //Check user with same email in DB
     const user: RegisterUser = req.body;    
     if (!user) return res.sendStatus(400);
@@ -20,21 +21,24 @@ class AuthController {
 
     //Save user in DB
     const otherUsers = users.filter((u) => u.email !== user.email);
-    const newUser: UserAuth = { ...user, refreshToken: "" };
+    const hashedPassword = await bcrypt.hash(user.password, 10);
+    const newUser: UserAuth = { email: user.email, password: hashedPassword,  refreshToken: "" };
     users = [ ...otherUsers, newUser ];
     res.sendStatus(200);
   }
 
-  public login(req, res) {
+  public async login(req, res) {
     
     const user: LoginUser = req.body;
     if (!user) return res.sendStatus(400);
 
     //Check user in DB
-    const dbUser = users.find((u) => {
-      return u.email === user.email && u.password === user.password;
-    })
-    if (!dbUser) return res.sendStatus(401);
+    const foundUser = users.find((u) => {
+      return u.email === user.email;
+    });
+    if (!foundUser) return res.sendStatus(401);
+    const passwordsMatch = await bcrypt.compare(user.password, foundUser.password);
+    if (!passwordsMatch) return res.sendStatus(401);
 
     //Generate tokens
     const accessToken = _generateAcessToken(user);
@@ -42,7 +46,7 @@ class AuthController {
 
     //Save refresh token in DB
     const otherUsers = users.filter((u) => u.email !== user.email);
-    const currentUser = { ...dbUser, refreshToken };
+    const currentUser = { ...foundUser, refreshToken };
     users = [ ...otherUsers, currentUser ];
 
     //Send tokens
@@ -75,7 +79,6 @@ class AuthController {
     if (!foundUser) return res.sendStatus(403);
 
     //Verify refresh token with jwt
-    console.log(process.env.ACCESS_SECRET_REFRESH_TOKEN, refreshToken)
     jwt.verify(
       refreshToken, 
       process.env.ACCESS_SECRET_REFRESH_TOKEN, 
