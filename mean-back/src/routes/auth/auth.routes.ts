@@ -1,0 +1,14 @@
+import { Router } from 'express';
+import AuthController from '../../controllers/auth.controller';
+import authenticateToken from '../../middlewares/auth.middleware';
+
+const router = Router();
+const authController = new AuthController();
+
+router.post('/signup', authController.register);
+router.post('/login', authController.login);
+router.delete('/logout', authController.logout);
+router.post('/token', authController.refreshToken);
+router.get('/authentication', authenticateToken, authController.dogs);
+
+export default router;
