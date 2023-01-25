@@ -1,58 +1,34 @@
+import mongoose from 'mongoose';
+
 import UserModel from '../models/user';
-import { UserDatabase } from '../../interfaces/user';
+import { RegisterUser, UserDatabase } from '../../interfaces/user';
+import { collections } from '../conn';
 
 class UserDao {
     constructor() {}
     //TODO: CACHING
 
-    public async createUser(user: UserDatabase) {
-        const newUser = new UserModel(user);
-        newUser.save();
+    public async createUser(user: RegisterUser) {
+        const collection = collections.users;
+        collection.insertOne(user);
     }
 
     public async getUserByEmail(email: string) {
-        const userFound = UserModel.findOne(data => {
-            return data.email === email;
-        })
-        .then((userFound) => {
-            if (userFound) {
-                return userFound;
-            }
-        }).catch((err) => {
-            console.log(err);
-            return null;
-        });
-
-        return userFound;
+        const collection = collections.users;
+        const userFound = collection.findOne({email: email});
+        return userFound; 
     }
 
     public async getUserById(id: string) {
-        const userFound = UserModel.findOne(data => {
-            return data._id === id;
-        })
-        .then((userFound) => {
-            if (userFound) {
-                return userFound;
-            }
-            return null;
-        }).catch((err) => {
-            console.log(err);
-            return null;
-        });
-
+        const collection = collections.users;
+        const userFound = await collection.findOne({_id: new mongoose.Types.ObjectId(id)});
         return userFound;
     }
 
     public async getUsers() {
-        const foundUsers = UserModel.find((err, data) => {
-            if (err) {
-                console.log(err);
-                return null;
-            }
-            return data;
-        });
-        
-        return foundUsers;
+        const collection = collections.users;
+        const users = await collection.find().toArray();
+        return users;
     }
         
     public async updateUser(user: UserDatabase) {
