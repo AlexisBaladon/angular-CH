@@ -31,12 +31,12 @@ class AuthController {
     
     const user: LoginUser = req.body;
     if (!user) return res.sendStatus(400);
-
     //Check user in DB
     const foundUser = users.find((u) => {
       return u.email === user.email;
     });
     if (!foundUser) return res.sendStatus(401);
+
     const passwordsMatch = await bcrypt.compare(user.password, foundUser.password);
     if (!passwordsMatch) return res.sendStatus(401);
 
@@ -54,8 +54,7 @@ class AuthController {
     res.status(200).json({ accessToken })
   }
   
-  public logout(req, res) { //TODO: ver segundo video
-    //Check refresh token in DB
+  public logout(req, res) {
     const refreshToken = req.cookies.jwt;
     if (!refreshToken) return res.sendStatus(401);
     const logoutUser = users.find((u) => u.refreshToken && u.refreshToken === refreshToken);

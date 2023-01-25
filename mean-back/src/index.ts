@@ -1,27 +1,30 @@
 import express from 'express';
 import cors from 'cors';
-//import conn from './db/conn';
+import { connectToDatabase } from './database/conn';
 import dotenv from 'dotenv';
 import apiRoutes from './routes/api.routes';
 import corsCredentials from './middlewares/cors.middleware';
 import corsOptions from './config/corsOptions';
 import cookieParser from 'cookie-parser';
+import morgan from 'morgan';
 
 dotenv.config({ path: "./config.env" });
 const app = express();
 const port = Number.parseInt(process.env.PORT) || 5000;
 
+app.use(morgan('dev'))
 app.use(corsCredentials);
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }))
 app.use(cookieParser());
-app.use('/api', apiRoutes)
 
 app.listen(port, () => {
-  // perform a database connection when server starts
-  //conn.connectToDatabase((err: Error) => {
-  //  if (err) console.error(err);
-  //});
+  connectToDatabase().then(() => {
+    app.use('/api', apiRoutes)
+    console.log(`Successfully connected to database`);
+  }).catch((err) => {
+    console.log(`Error connecting to database: ${err}`);
+  });
   console.log(`Server is running on port: ${port}`);
 });
