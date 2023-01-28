@@ -40,8 +40,8 @@ class AuthController {
     if (!passwordsMatch) return res.sendStatus(401);
 
     //Generate tokens
-    const accessToken = this._generateAcessToken(user);
-    const refreshToken = this._generateRefreshToken(user);
+    const accessToken = __generateAcessToken(user);
+    const refreshToken = __generateRefreshToken(user);
 
     //Save refresh token in DB
     refreshTokens.push({ email: user.email, refreshToken });
@@ -78,29 +78,26 @@ class AuthController {
       process.env.ACCESS_SECRET_REFRESH_TOKEN, 
       (err, user) => {
         if (err || foundUser.email !== user.email) return res.sendStatus(403);
-        const accessToken = this._generateAcessToken(user);
+        const accessToken = __generateAcessToken(user);
         res.json({ accessToken });
       }
     )
-  }
-
-  
-  private _generateAcessToken = (user) => {
-    return jwt.sign(
-      {email: user.email},
-      process.env.ACCESS_SECRET_TOKEN,
-      { expiresIn: '15s' } //TODO: 5MIN IN PRODUCTION
-    );
-  }
-
-  private _generateRefreshToken = (user) => {
-    return jwt.sign(
-      {email: user.email},
-      process.env.ACCESS_SECRET_REFRESH_TOKEN, 
-      {expiresIn: '1d'}
-    );
-  }
-
+  }  
 }
 
+const __generateAcessToken = (user) => {
+  return jwt.sign(
+    {email: user.email},
+    process.env.ACCESS_SECRET_TOKEN,
+    { expiresIn: '15s' } //TODO: 5MIN IN PRODUCTION
+  );
+}
+
+const __generateRefreshToken = (user) => {
+  return jwt.sign(
+    {email: user.email},
+    process.env.ACCESS_SECRET_REFRESH_TOKEN, 
+    {expiresIn: '1d'}
+  );
+}
 export default AuthController;
