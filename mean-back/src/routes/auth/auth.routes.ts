@@ -9,6 +9,5 @@ router.post('/signup', authController.signup);
 router.post('/login', authController.login);
 router.delete('/logout', authController.logout);
 router.post('/token', authController.refreshToken);
-router.get('/authentication', authenticateToken, authController.dogs);
 
 export default router;
