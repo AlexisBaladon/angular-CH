@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-import UserModel from '../models/user';
+import {UserModel} from '../models/user';
 import { RegisterUser, UserDatabase } from '../../interfaces/user';
 import { collections } from '../conn';
 
@@ -60,4 +60,4 @@ class UserDao {
 
 }
 
-export default UserDao;
+export {UserDao};

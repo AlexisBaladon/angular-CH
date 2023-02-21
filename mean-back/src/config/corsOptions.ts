@@ -1,4 +1,4 @@
-import allowedOrigins from './allowedOrigins';
+import {allowedOrigins} from './allowedOrigins';
 
 const corsOptions = {
     origin: (origin, callback) => {
@@ -14,4 +14,4 @@ const corsOptions = {
     optionsSuccessStatus: 200,
 }
 
-export default corsOptions;
+export {corsOptions}

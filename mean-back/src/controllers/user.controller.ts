@@ -1,4 +1,4 @@
-import UserDao from "../database/dao/userDAO";
+import {UserDao} from "../database/dao/userDAO";
 
 const userDAO = new UserDao();
 
@@ -85,5 +85,5 @@ class UserController {
     
 }
 
-export default UserController;
+export {UserController}
 

@@ -1,9 +1,9 @@
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import { LoginUser, RegisterUser } from '../interfaces/user';
-import UserDAO from '../database/dao/userDAO';
+import {UserDao} from '../database/dao/userDAO';
 
-const userDao = new UserDAO();
+const userDao = new UserDao();
 //keep track of refresh tokens in memory
 
 interface RefreshToken {
@@ -100,4 +100,4 @@ const __generateRefreshToken = (user) => {
     {expiresIn: '1d'}
   );
 }
-export default AuthController;
+export {AuthController}

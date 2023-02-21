@@ -1,4 +1,4 @@
-import allowedOrigins from "../config/allowedOrigins";
+import {allowedOrigins} from "../config/allowedOrigins";
 
 const corsCredentials = (req, res, next) => {
     const origin = req.headers.origin;
@@ -8,4 +8,4 @@ const corsCredentials = (req, res, next) => {
     next();
 }
 
-export default corsCredentials;
+export {corsCredentials}

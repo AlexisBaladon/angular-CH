@@ -2,9 +2,9 @@ import express from 'express';
 import cors from 'cors';
 import { connectToDatabase } from './database/conn';
 import dotenv from 'dotenv';
-import apiRoutes from './routes/api.routes';
-import corsCredentials from './middlewares/cors.middleware';
-import corsOptions from './config/corsOptions';
+import { router as apiRoutes } from './routes/api.routes';
+import { corsCredentials } from './middlewares/cors.middleware';
+import { corsOptions } from './config/corsOptions';
 import cookieParser from 'cookie-parser';
 import morgan from 'morgan';
 

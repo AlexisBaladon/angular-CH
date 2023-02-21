@@ -7,4 +7,4 @@ router.get('*', (req, res) => {
   res.status(404).send({ message: `Route ${url} with method ${method} not found` })
 })
 
-export default router
+export {router};
