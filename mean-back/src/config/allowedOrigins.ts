@@ -1,5 +1,5 @@
 const allowedOrigins = [
-    'localhost',
+    'localhost:4200', // TODO change to deploy domain
 ]
 
 export default allowedOrigins;
