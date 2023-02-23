@@ -2,6 +2,7 @@ import {allowedOrigins} from './allowedOrigins';
 
 const corsOptions = {
     origin: (origin, callback) => {
+        console.log(origin)
         if (!origin || allowedOrigins.includes(origin)) {
             //TODO: REMOVE !origin IN PRODUCTION
             callback(null, true);

@@ -3,6 +3,9 @@ declare global {
       interface ProcessEnv {
         DB_CONN_STRING: string;
         DB_USER_COLLECTION_NAME: string;
+        DB_STUDENT_COLLECTION_NAME: string;
+        DB_COURSE_COLLECTION_NAME: string;
+        DB_ENROLLMENT_COLLECTION_NAME: string;
         DB_NAME: string;
         NODE_ENV: 'development' | 'production';
         PORT?: string;

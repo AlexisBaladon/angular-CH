@@ -15,7 +15,7 @@ let refreshTokens: RefreshToken[] = [];
 class AuthController {
 
   public async signup(req, res) {
-    const user: RegisterUser = req.body;    
+    const user: RegisterUser = req.body;
     if (!user) return res.sendStatus(400);
     const foundUser = await userDao.getUserByEmail(user.email);
     if (foundUser) return res.sendStatus(409);

@@ -60,7 +60,7 @@ class UserController {
         }
     }
 
-    //TODO: TEST
+    
 
     public async updateUser(req: any, res: any) {
         const user = req.body;
