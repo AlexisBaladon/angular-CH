@@ -62,21 +62,22 @@ class StudentController {
 
     public async updateStudent(req: any, res: any) {
         const student = req.body;
-        const studentFound = await studentDAO.getStudentById(student._id);
-        if (studentFound) {
+        Object.assign(student, { id: req.params.id });
+        try {
             await studentDAO.updateStudent(student);
             res.status(200).json({ message: "Student updated" });
-        } else {
+        }
+        catch {
             res.status(404).json({ message: "Student not found" });
         }
     }
 
     public async deleteStudent(req: any, res: any) {
-        const studentFound = await studentDAO.getStudentById(req.body.id);
-        if (studentFound) {
-            await studentDAO.deleteStudent(req.body.id);
+        try {
+            await studentDAO.deleteStudent(req.params.id);
             res.status(200).json({ message: "Student deleted" });
-        } else {
+        }
+        catch {
             res.status(404).json({ message: "Student not found" });
         }
     }

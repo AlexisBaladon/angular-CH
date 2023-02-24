@@ -1,6 +1,3 @@
-import mongoose from 'mongoose';
-
-import {StudentModel} from '../models/student';
 import { DatabaseStudent, Student } from '../../interfaces/student';
 import { collections } from '../conn';
 
@@ -21,7 +18,7 @@ class StudentDao {
 
     public async getStudentById(id: string) {
         const collection = collections.students;
-        const studentFound = await collection.findOne({_id: new mongoose.Types.ObjectId(id)});
+        const studentFound = await collection.findOne({id: id});
         return studentFound;
     }
 
@@ -32,33 +29,22 @@ class StudentDao {
     }
         
     public async updateStudent(student: Student) {
-        StudentModel.findOne(data => {
-            return data._id === student._id;
-        }).then((studentFound) => {
-            if (studentFound) {
-                studentFound.email = student.email;
-                studentFound.name = student.name;
-                studentFound.direction = student.direction;
-                studentFound.phone = student.phone;
-                studentFound.profile = student.profile;
-                studentFound.save();
-            }
-        }).catch((err) => {
-            console.log(err);
-        });
+        const collection = collections.students;
+        collection.updateOne({id: student.id}, {$set: student});
     }
 
     public async deleteStudent(id: string) {
-        StudentModel.findOne(data => {
-            return data._id === id;
-        }).then((studentFound) => {
-            if (studentFound) {
-                studentFound.delete();
+        try {
+          const collection = collections.students;
+          const courseFound = await collection.findOne({id});
+            if (courseFound) {
+                collection.deleteOne({id});
             }
-        }).catch((err) => {
+        } catch (err) {
             console.log(err);
-        });
-    }
+            throw err;
+        }
+      }
 
 }
 

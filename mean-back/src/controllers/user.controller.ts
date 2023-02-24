@@ -64,21 +64,22 @@ class UserController {
 
     public async updateUser(req: any, res: any) {
         const user = req.body;
-        const userFound = await userDAO.getUserById(user._id);
-        if (userFound) {
+        Object.assign(user, { id: req.params.id });
+        try {
             await userDAO.updateUser(user);
             res.status(200).json({ message: "User updated" });
-        } else {
+        }
+        catch {
             res.status(404).json({ message: "User not found" });
         }
     }
 
     public async deleteUser(req: any, res: any) {
-        const userFound = await userDAO.getUserById(req.body.id);
-        if (userFound) {
-            await userDAO.deleteUser(req.body.id);
+        try {
+            await userDAO.deleteUser(req.params.id);
             res.status(200).json({ message: "User deleted" });
-        } else {
+        }
+        catch {
             res.status(404).json({ message: "User not found" });
         }
     }

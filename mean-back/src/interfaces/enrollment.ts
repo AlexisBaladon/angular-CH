@@ -1,9 +1,11 @@
 export interface Enrollment {
     _id: string;
-    name: string;
+    id: string;
     studentId: string;
     courseId: string;
+    grade: number | null;
     enrollmentDate: Date;
+    finishDate: Date | null;
     enrollerId: string;
 }
 

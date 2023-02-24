@@ -5,7 +5,9 @@ const EnrollmentSchema = new mongoose.Schema({
     name: { type: String, required: true },
     studentId: { type: String, required: true },
     courseId: { type: String, required: true },
+    grade: { type: Number, required: true },
     enrollmentDate: { type: Date, required: true },
+    finishDate: { type: Date, required: true },
     enrollerId: { type: String, required: true },
 });
 

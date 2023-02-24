@@ -13,15 +13,9 @@ class EnrollmentDao {
         collection.insertOne(enrollment);
     }
 
-    public async getEnrollmentByEmail(email: string) {
-        const collection = collections.enrollments;
-        const enrollmentFound = collection.findOne({email: email});
-        return enrollmentFound; 
-    }
-
     public async getEnrollmentById(id: string) {
         const collection = collections.enrollments;
-        const enrollmentFound = await collection.findOne({_id: new mongoose.Types.ObjectId(id)});
+        const enrollmentFound = await collection.findOne({id});
         return enrollmentFound;
     }
 
@@ -32,32 +26,21 @@ class EnrollmentDao {
     }
         
     public async updateEnrollment(enrollment: Enrollment) {
-        EnrollmentModel.findOne(data => {
-            return data._id === enrollment._id;
-        }).then((enrollmentFound) => {
-            if (enrollmentFound) {
-                enrollmentFound.name = enrollment.name;
-                enrollmentFound.studentId = enrollment.studentId;
-                enrollmentFound.courseId = enrollment.courseId;
-                enrollmentFound.enrollmentDate = enrollment.enrollmentDate;
-                enrollmentFound.enrollerId = enrollment.enrollerId;
-                enrollmentFound.save();
-            }
-        }).catch((err) => {
-            console.log(err);
-        });
+        const collection = collections.enrollments;
+        await collection.updateOne({id: enrollment.id}, {$set: enrollment});
     }
 
     public async deleteEnrollment(id: string) {
-        EnrollmentModel.findOne(data => {
-            return data._id === id;
-        }).then((enrollmentFound) => {
-            if (enrollmentFound) {
-                enrollmentFound.delete();
+        try {
+            const collection = collections.enrollments;
+            const courseFound = await collection.findOne({id});
+            if (courseFound) {
+                collection.deleteOne({id});
             }
-        }).catch((err) => {
+        } catch (err) {
             console.log(err);
-        });
+            throw err;
+        }
     }
 
 }

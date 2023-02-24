@@ -1,6 +1,3 @@
-import mongoose from 'mongoose';
-
-import {UserModel} from '../models/user';
 import { RegisterUser, UserDatabase } from '../../interfaces/user';
 import { collections } from '../conn';
 
@@ -21,7 +18,7 @@ class UserDao {
 
     public async getUserById(id: string) {
         const collection = collections.users;
-        const userFound = await collection.findOne({_id: new mongoose.Types.ObjectId(id)});
+        const userFound = await collection.findOne({id: id});
         return userFound;
     }
 
@@ -32,31 +29,22 @@ class UserDao {
     }
         
     public async updateUser(user: UserDatabase) {
-        UserModel.findOne(data => {
-            return data._id === user._id;
-        }).then((userFound) => {
-            if (userFound) {
-                userFound.email = user.email;
-                userFound.name = user.name;
-                userFound.password = user.password;
-                userFound.save();
-            }
-        }).catch((err) => {
-            console.log(err);
-        });
+        const collection = collections.users;
+        await collection.updateOne({id: user.id}, {$set: user});
     }
 
     public async deleteUser(id: string) {
-        UserModel.findOne(data => {
-            return data._id === id;
-        }).then((userFound) => {
-            if (userFound) {
-                userFound.delete();
+        try {
+          const collection = collections.users;
+          const courseFound = await collection.findOne({id});
+            if (courseFound) {
+                collection.deleteOne({id});
             }
-        }).catch((err) => {
+        } catch (err) {
             console.log(err);
-        });
-    }
+            throw err;
+        }
+      }
 
 }
 
