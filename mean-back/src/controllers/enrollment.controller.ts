@@ -5,12 +5,13 @@ const enrollmentDAO = new EnrollmentDao();
 class EnrollmentController {
 
     public async createEnrollment(req: any, res: any) {
-        const enrollment = req.body;
+        const randomId = Math.random().toString(32).substring(2, 8); //for test purposes
+        const enrollment = { ...req.body, id: randomId}
         await enrollmentDAO.createEnrollment(enrollment).catch((err) => {
             console.log(err);
             res.status(500).json({ message: "Internal server error" });
         });
-        res.status(200).json({ message: "Enrollment created" });
+        res.status(200).json(enrollment);
     }
 
     public async getEnrollmentById(req: any, res: any) {

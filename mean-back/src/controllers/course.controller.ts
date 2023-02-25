@@ -5,13 +5,14 @@ const courseDAO = new CourseDao();
 class CourseController {
 
     public async createCourse(req: any, res: any) {
-        const course = req.body;
+        const randomId = Math.random().toString(32).substring(2, 8); //for test purposes
+        const course = { ...req.body, id: randomId}
 
         await courseDAO.createCourse(course).catch((err) => {
             console.log(err);
             res.status(500).json({ message: "Internal server error" });
         });
-        res.status(200).json({ message: "Course created" });
+        res.status(200).json(course);
     }
 
     public async getCourseById(req: any, res: any) {

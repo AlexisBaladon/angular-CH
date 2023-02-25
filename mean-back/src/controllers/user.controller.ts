@@ -1,11 +1,13 @@
 import {UserDao} from "../database/dao/userDAO";
+import bcrypt from 'bcrypt';
 
 const userDAO = new UserDao();
 
 class UserController {
 
     public async createUser(req: any, res: any) {
-        const user = req.body;
+        const randomId = Math.random().toString(32).substring(2, 8); //for test purposes
+        const user = { ...req.body, id: randomId}
 
         const userFound = await userDAO.getUserByEmail(user.email);
         if (!userFound) {
@@ -13,7 +15,7 @@ class UserController {
                 console.log(err);
                 res.status(500).json({ message: "Internal server error" });
             });
-            res.status(200).json({ message: "User created" });
+            res.status(200).json(user);
         } else {
             res.status(409).json({ message: "User already exists" });
         }
@@ -66,6 +68,11 @@ class UserController {
         const user = req.body;
         Object.assign(user, { id: req.params.id });
         try {
+            const userFound = await userDAO.getUserById(user.id);
+            if (userFound.password !== user.password) {
+                const newPassword = await bcrypt.hash(user.password, 10);
+                Object.assign(user, { password: newPassword });
+            }
             await userDAO.updateUser(user);
             res.status(200).json({ message: "User updated" });
         }

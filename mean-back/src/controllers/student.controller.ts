@@ -5,7 +5,8 @@ const studentDAO = new StudentDao();
 class StudentController {
 
     public async createStudent(req: any, res: any) {
-        const student = req.body;
+        const randomId = Math.random().toString(32).substring(2, 8); //for test purposes
+        const student = { averageGrade: 0, ...req.body, id: randomId }
 
         const studentFound = await studentDAO.getStudentByEmail(student.email);
         if (!studentFound) {
@@ -13,7 +14,7 @@ class StudentController {
                 console.log(err);
                 res.status(500).json({ message: "Internal server error" });
             });
-            res.status(200).json({ message: "Student created" });
+            res.status(200).json(student);
         } else {
             res.status(409).json({ message: "Student already exists" });
         }

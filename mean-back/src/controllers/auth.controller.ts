@@ -22,14 +22,13 @@ class AuthController {
 
     const hashedPassword = await bcrypt.hash(user.password, 10);
     const newRefreshToken = { email: user.email, refreshToken: ""};
-    const newUser: RegisterUser = { ...user, password: hashedPassword};
+    const newUser: RegisterUser = { ...user, password: hashedPassword };
     refreshTokens.push(newRefreshToken);
-    await userDao.createUser(newUser);
-    res.sendStatus(200);
+    await userDao.createUser({...newUser, profile: 'user'});
+    res.status(200).json({ ...newUser, profile: 'user', password: undefined });
   }
 
-  public async login(req, res) {
-    
+  public async login(req, res) {    
     const user: LoginUser = req.body;
     if (!user) return res.sendStatus(400);
     //Check user in DB
@@ -48,7 +47,7 @@ class AuthController {
 
     //Send tokens
     res.cookie('jwt', refreshToken, { httpOnly: true, maxAge: 1000 * 60 * 60 * 24 });
-    res.status(200).json({ accessToken })
+    res.status(200).json({ accessToken, ...foundUser, password: undefined });
   }
   
   public logout(req, res) {
@@ -89,7 +88,7 @@ const __generateAcessToken = (user) => {
   return jwt.sign(
     {email: user.email},
     process.env.ACCESS_SECRET_TOKEN,
-    { expiresIn: '15s' } //TODO: 5MIN IN PRODUCTION
+    { expiresIn: '5m' }
   );
 }
 

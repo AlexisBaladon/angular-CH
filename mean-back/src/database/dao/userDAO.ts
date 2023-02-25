@@ -5,7 +5,7 @@ class UserDao {
     constructor() {}
     //TODO: CACHING
 
-    public async createUser(user: RegisterUser) {
+    public async createUser(user: RegisterUser & Omit<Partial<UserDatabase>, '_id'>) {
         const collection = collections.users;
         collection.insertOne(user);
     }
