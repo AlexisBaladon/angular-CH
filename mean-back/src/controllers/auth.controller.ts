@@ -24,8 +24,9 @@ class AuthController {
     const newRefreshToken = { email: user.email, refreshToken: ""};
     const newUser: RegisterUser = { ...user, password: hashedPassword };
     refreshTokens.push(newRefreshToken);
-    await userDao.createUser({...newUser, profile: 'user'});
-    res.status(200).json({ ...newUser, profile: 'user', password: undefined });
+    const randomId = Math.random().toString(32).substring(2, 8); //for test purposes
+    await userDao.createUser({...newUser, profile: 'user', id: randomId});
+    res.status(200).json({ ...newUser, profile: 'user', id: randomId, password: undefined });
   }
 
   public async login(req, res) {    
