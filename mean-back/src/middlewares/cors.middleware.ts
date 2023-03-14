@@ -5,6 +5,7 @@ const corsCredentials = (req, res, next) => {
     console.log(origin)
     if (origin && allowedOrigins.includes(origin)) {
         res.header('Access-Control-Allow-Credentials', 'true');
+        res.set('Access-Control-Allow-Origin', origin);
     }
     next();
 }
