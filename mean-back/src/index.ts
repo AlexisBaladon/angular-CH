@@ -14,7 +14,9 @@ const port = Number.parseInt(process.env.PORT) || 5000;
 
 app.use(morgan('dev'))
 app.use(corsCredentials);
-app.use(cors(corsOptions));
+app.use(cors({
+  origin: '*' // TODO change to deploy domain
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }))
 app.use(cookieParser());
