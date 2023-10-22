@@ -1,5 +1,7 @@
 # Academic workstation Backend
 
+**🚧 Note:** The server is currently not running because the host free-trial expired :)
+
 <img src="./readme/designs/auth.png" width="1000px">
 
 # Features:
